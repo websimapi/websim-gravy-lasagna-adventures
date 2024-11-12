@@ -207,6 +207,31 @@
             50% { opacity: 0.8; }
             100% { opacity: 0; transform: translateY(100%); }
         }
+
+        @keyframes fadeOut {
+            from { opacity: 0.6; transform: scale(1); }
+            to { opacity: 0; transform: scale(1.5); }
+        }
+
+        .gravy-drip {
+            position: absolute;
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, #613613, #8b4513);
+            animation: dripFall 2s linear;
+            filter: drop-shadow(0 0 2px #ffd700);
+        }
+
+        @keyframes dripFall {
+            from { transform: translateY(-100vh); opacity: 0.8; }
+            to { transform: translateY(100vh); opacity: 0; }
+        }
+
+        .lasagna-layer:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+            box-shadow: 0 0 30px #ffd700;
+        }
     </style>
 </head>
 <body>
@@ -218,7 +243,7 @@
 
     <script>
         const container = document.getElementById('lasagnaContainer');
-        
+
         // Create lasagna layers
         for (let i = 0; i < 6; i++) {
             const layer = document.createElement('div');
@@ -314,6 +339,21 @@
             }
         };
 
+        function createGravySplatter(x, y) {
+            const splatter = document.createElement('div');
+            splatter.style.position = 'absolute';
+            splatter.style.left = `${x}px`;
+            splatter.style.top = `${y}px`;
+            splatter.style.background = 'radial-gradient(circle, #613613 0%, transparent 70%)';
+            splatter.style.width = '50px';
+            splatter.style.height = '50px';
+            splatter.style.transform = `rotate(${Math.random() * 360}deg)`;
+            splatter.style.opacity = '0.6';
+            splatter.style.animation = 'fadeOut 2s forwards';
+            document.body.appendChild(splatter);
+            setTimeout(() => splatter.remove(), 2000);
+        }
+
         // Enhanced click effect
         container.addEventListener('click', (e) => {
             // Create mega splash
@@ -350,6 +390,18 @@
                 setTimeout(() => splash.remove(), 1500);
             }
 
+            // Add splatter effect
+            for(let i = 0; i < 5; i++) {
+                createGravySplatter(
+                    e.clientX + (Math.random() - 0.5) * 100,
+                    e.clientY + (Math.random() - 0.5) * 100
+                );
+            }
+
+            // Add gravy splash sound effect
+            const splashSound = new Audio('data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAAABmYWN0BAAAAAAAAABkYXRhAAAAAA==');
+            splashSound.play().catch(() => {});
+
             // Enhanced wobble effect
             const layers = document.querySelectorAll('.lasagna-layer');
             layers.forEach((layer, index) => {
@@ -372,6 +424,17 @@
             document.body.appendChild(gravyBurst);
             setTimeout(() => gravyBurst.remove(), 1000);
         });
+
+        // Add gravy drips
+        function addGravyDrips() {
+            const drip = document.createElement('div');
+            drip.className = 'gravy-drip';
+            drip.style.left = `${Math.random() * window.innerWidth}px`;
+            container.appendChild(drip);
+            setTimeout(() => drip.remove(), 2000);
+        }
+
+        setInterval(addGravyDrips, 1000);
 
         // Add tsunami effect on spacebar
         document.addEventListener('keydown', (e) => {
