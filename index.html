@@ -171,6 +171,22 @@
             pointer-events: none;
             z-index: 1;
         }
+
+        .gravy-pour {
+            position: absolute;
+            width: 20px;
+            height: 100vh;
+            background: linear-gradient(180deg, #613613, #8b4513);
+            opacity: 0;
+            filter: blur(2px);
+            animation: pourGravy 2s ease-in-out;
+        }
+
+        @keyframes pourGravy {
+            0% { opacity: 0; transform: translateY(-100%); }
+            50% { opacity: 0.8; }
+            100% { opacity: 0; transform: translateY(100%); }
+        }
     </style>
 </head>
 <body>
@@ -303,6 +319,16 @@
                     }, 200);
                 }, 200);
             });
+
+            // Add gravy burst
+            const gravyBurst = document.createElement('div');
+            gravyBurst.style.position = 'absolute';
+            gravyBurst.style.left = `${e.clientX}px`;
+            gravyBurst.style.top = `${e.clientY}px`;
+            gravyBurst.innerHTML = '🥘'.repeat(3);
+            gravyBurst.style.animation = 'gravyBurst 1s forwards';
+            document.body.appendChild(gravyBurst);
+            setTimeout(() => gravyBurst.remove(), 1000);
         });
 
         // Add tsunami effect on spacebar
@@ -352,6 +378,21 @@
                 clearInterval(originalParticleInterval);
             }, { once: true });
         });
+
+        // Trigger random gravy pours
+        function createGravyPour() {
+            const pour = document.createElement('div');
+            pour.className = 'gravy-pour';
+            pour.style.left = `${Math.random() * window.innerWidth}px`;
+            document.body.appendChild(pour);
+            setTimeout(() => pour.remove(), 2000);
+        }
+
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                createGravyPour();
+            }
+        }, 3000);
     </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
