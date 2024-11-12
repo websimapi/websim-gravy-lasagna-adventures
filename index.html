@@ -117,7 +117,36 @@
             100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
         }
 
-        /* Add new gravy splash effect */
+        /* New delicious effects */
+        .gravy-tsunami {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to top, #61361390, transparent);
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        @keyframes tsunami {
+            0% { transform: translateY(100%); opacity: 0.8; }
+            50% { transform: translateY(40%); opacity: 0.9; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+
+        .gravy-sparkle {
+            position: absolute;
+            color: #ffd700;
+            font-size: 1.5em;
+            pointer-events: none;
+            animation: sparkle 1s forwards;
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            100% { transform: scale(2) rotate(360deg); opacity: 0; }
+        }
+
         .mega-splash {
             position: fixed;
             width: 100vw;
@@ -274,6 +303,54 @@
                     }, 200);
                 }, 200);
             });
+        });
+
+        // Add tsunami effect on spacebar
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                const tsunami = document.createElement('div');
+                tsunami.className = 'gravy-tsunami';
+                document.body.appendChild(tsunami);
+                tsunami.style.animation = 'tsunami 2s forwards';
+                setTimeout(() => tsunami.remove(), 2000);
+
+                // Add sparkles
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(() => {
+                        const sparkle = document.createElement('div');
+                        sparkle.className = 'gravy-sparkle';
+                        sparkle.innerHTML = '✨';
+                        sparkle.style.left = `${Math.random() * window.innerWidth}px`;
+                        sparkle.style.top = `${Math.random() * window.innerHeight}px`;
+                        document.body.appendChild(sparkle);
+                        setTimeout(() => sparkle.remove(), 1000);
+                    }, i * 100);
+                }
+
+                // Create extra gravy particles
+                for (let i = 0; i < 20; i++) {
+                    createGravyParticle();
+                }
+            }
+        });
+
+        // Make lasagna bounce on hover
+        container.addEventListener('mouseover', () => {
+            container.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                container.style.transform = 'scale(1)';
+            }, 200);
+        });
+
+        // Double the steam and particles when hovering
+        container.addEventListener('mouseenter', () => {
+            const originalInterval = setInterval(createSteam, 150);
+            const originalParticleInterval = setInterval(createGravyParticle, 250);
+            
+            container.addEventListener('mouseleave', () => {
+                clearInterval(originalInterval);
+                clearInterval(originalParticleInterval);
+            }, { once: true });
         });
     </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
